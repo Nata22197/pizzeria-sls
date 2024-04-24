@@ -1,0 +1,6 @@
+helloWorld:
+  handler: ./src/lambdas/helloWorld.handler
+  events:
+    - http:
+        method: GET
+        path: /hello
