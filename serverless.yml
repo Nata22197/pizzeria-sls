@@ -2,12 +2,39 @@ service: pizzeria-sls
 
 frameworkVersion: "3"
 
+useDotenv: true
+
 provider:
   name: aws
   runtime: nodejs18.x
+  region: ${opt:region, env:REGION}
+  architecture: arm64
+  environment:
+    TABLE_NAME: orders
+    DEFAULT_CONSUMER_ID: 'NOT_INFORMED'
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:deleteItem
+            - dynamodb:Scan
+          Resource: 'arn:aws:dynamodb:localhost:*:table/orders'
+
+package:
+  individually: true
 
 plugins:
   - serverless-offline
 
 functions:
   - ${file(resources/functions.yml)}
+
+resources:
+  Resources:
+    RepositoryTable: ${file(resources/dynamoDB.yml):RepositoryTable}

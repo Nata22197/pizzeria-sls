@@ -1,6 +1,27 @@
-helloWorld:
-  handler: ./src/lambdas/helloWorld.handler
+getOrders:
+  handler: ./src/lambdas/getOrders.handler
   events:
     - http:
         method: GET
-        path: /hello
+        path: /orders
+
+getOrder:
+  handler: ./src/lambdas/getOrder.handler
+  events:
+    - http:
+        method: GET
+        path: /order/{id}
+
+postOrder:
+  handler: ./src/lambdas/postOrder.handler
+  events:
+    - http:
+        method: POST
+        path: /order
+
+putOrder:
+  handler: ./src/lambdas/putOrder.handler
+  events:
+    - http:
+        method: PUT
+        path: /order/{id}

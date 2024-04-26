@@ -4,10 +4,24 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "dev": "serverless offline",
+    "dynamodb:create-table": "aws dynamodb create-table --table-name orders --attribute-definitions AttributeName=orderId,AttributeType=S --key-schema AttributeName=orderId,KeyType=HASH --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 --endpoint-url http://localhost:8000>/dev/null && echo 'La tabla Orders se creó correctamente'",
+    "dynamodb:pull": "docker pull amazon/dynamodb-local:1.21.0",
+    "dynamodb:initialize": "docker run -d -p 8000:8000 --name dynamodb-container amazon/dynamodb-local:1.21.0 -jar DynamoDBLocal.jar -sharedDb || true && echo 'El servicio DynamoDB está escuchando en http://localhost:8000'",
+    "dynamodb:start": "docker inspect dynamodb-container > /dev/null 2>&1 || (npm run dynamodb:pull && npm run dynamodb:initialize && npm run dynamodb:create-table); docker start dynamodb-container || true && echo 'El servicio DynamoDB está escuchando en http://localhost:8000'",
+    "dev": "IS_OFFLINE=true npm run dynamodb:start && serverless offline",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.473.0",
+    "@aws-sdk/lib-dynamodb": "^3.473.0",
+    "config": "^3.3.9",
+    "dotenv": "^16.4.5",
+    "uuid": "^9.0.1"
+  },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.116",
+    "@types/node": "^18.17.15",
+    "serverless": "^3.35.2",
     "serverless-offline": "^13.1.1"
   },
   "keywords": [],

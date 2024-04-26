@@ -1,0 +1,15 @@
+RepositoryTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: ${self:provider.environment.TABLE_NAME}
+    PointInTimeRecoverySpecification:
+      PointInTimeRecoveryEnabled: true
+    ProvisionedThroughput:
+      ReadCapacityUnits: 5
+      WriteCapacityUnits: 5
+    AttributeDefinitions:
+      - AttributeName: orderId
+        AttributeType: S
+    KeySchema:
+      - AttributeName: orderId
+        KeyType: HASH
