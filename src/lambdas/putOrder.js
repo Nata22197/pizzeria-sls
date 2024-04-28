@@ -1,5 +1,5 @@
 'use strict';
-const { putOrder } = require('../order/dynamoDBStore');
+const { putOrder } = require('../services/dynamoDBService');
 const { responseFactory, errorFactory } = require('../utils/response');
 
 module.exports.handler = async (event) => {

@@ -33,12 +33,12 @@ function init() {
 async function getOrders () {
     const client = init();
 
-    const params = new ScanCommand({
+    const response = new ScanCommand({
         TableName: process.env.TABLE_NAME,
         Limit: 1000
     });
 
-    const orders = await client.send(params);
+    const orders = await client.send(response);
     if (!orders.Items) return [];
 
     return orders.Items;
@@ -47,14 +47,14 @@ async function getOrders () {
 async function getOrderById (id) {
     const client = init();
 
-	const params = new GetCommand({
+	const response = new GetCommand({
 		TableName: process.env.TABLE_NAME,
         Key: {
             orderId: id,
         }
 	});
 
-	const { Item } = await client.send(params);
+	const { Item } = await client.send(response);
 
     if (!Item) return null;
     return Item;
@@ -64,19 +64,19 @@ async function postOrder (order) {
     const client = init();
     order.delivery_status = 'READY_FOR_DELIVERY';
 
-    const params = new PutCommand({
+    const response = new PutCommand({
         TableName: process.env.TABLE_NAME,
         Item: order,
         ConditionExpression: 'attribute_not_exists(orderId)',
     });
 
-    await client.send(params);
+    await client.send(response);
 };
 
 async function putOrder (order, id) {
     const client = init();
 
-    const params = new PutCommand({
+    const response = new PutCommand({
         TableName: process.env.TABLE_NAME,
         Item: order,
         Key: {
@@ -84,14 +84,38 @@ async function putOrder (order, id) {
         },
         ConditionExpression: 'attribute_exists(orderId)',
     });
-    await client.send(params);
+    await client.send(response);
     return getOrderById(id);
 };
+
+async function deleteOrder (id) {
+    if (!id) return null;
+    const client = init();
+
+    const params = new DeleteCommand({
+        TableName: process.env.TABLE_NAME,
+        Key: {
+            orderId: id,
+        },
+        ReturnValues: 'ALL_OLD',
+    });
+    const response = await client.send(params);
+
+    if (response.Attributes) {
+        return {
+            name: response.Attributes.name,
+            address: response.Attributes.address,
+            pizzas: response.Attributes.pizzas,
+        }
+    };
+    return null;
+}
 
 module.exports = {
     getOrders,
     getOrderById,
     postOrder,
     putOrder,
+    deleteOrder
 };
   

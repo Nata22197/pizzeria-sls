@@ -1,6 +1,6 @@
 'use strict';
 const { v4: uuidv4 } = require('uuid');
-const { postOrder } = require('../order/dynamoDBStore');
+const { postOrder } = require('../services/dynamoDBService');
 const { responseFactory, errorFactory } = require('../utils/response');
 
 module.exports.handler = async (event) => {

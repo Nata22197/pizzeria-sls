@@ -25,3 +25,10 @@ putOrder:
     - http:
         method: PUT
         path: /order/{id}
+
+deleteOrder:
+  handler: ./src/lambdas/deleteOrder.handler
+  events:
+    - http:
+        method: DELETE
+        path: /order/{id}
