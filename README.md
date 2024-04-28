@@ -33,7 +33,3 @@ La definición de los recursos necesarios para el servicio se deben alojar en la
 
 ## Iniciar
  `npm run dev`
-
-## Correr comando para la creación de la tabla en DynamoDB en docker local
-
- `npm run dynamodb:create-table`
