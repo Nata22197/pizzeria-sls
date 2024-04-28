@@ -13,7 +13,7 @@ Este repositorio  está pensado para utilizarse con el gestor de paquetes NPM.
 
 - Instalar Docker
 
-- [Documentación oficial Serverless](https://www.docker.com/products/docker-desktop/)
+- [Documentación oficial Docker](https://www.docker.com/products/docker-desktop/)
 
 - Instalar Postman
 
